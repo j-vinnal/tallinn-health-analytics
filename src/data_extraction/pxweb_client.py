@@ -1,11 +1,13 @@
+"""
+pxweb_client.py
+"""
+
 import json
-import os
-from datetime import date
 from pathlib import Path
+from datetime import date
 from urllib.request import Request, urlopen
 
-from dotenv import load_dotenv
-
+from config import RAW_DIR
 
 URL = "https://statistika.tai.ee/api/v1/et/Andmebaas/02Haigestumus/05Psyyhikahaired/PKH2.px"
 BODY = {
@@ -22,30 +24,25 @@ BODY = {
 }
 
 
-def main() -> None:
-    load_dotenv()
+def download_pkh2_csv() -> Path:
+    """
 
-    project_dir = Path(os.getenv("PROJECT_DIR", Path.cwd()))
-    raw_dir = Path(project_dir, os.getenv("RAW_DIR"))
+    :return:
+    """
+    RAW_DIR.mkdir(parents=True, exist_ok=True)
 
-    raw_dir.mkdir(parents=True, exist_ok=True)
-
-    payload = json.dumps(BODY).encode("utf-8")
+    payload = json.dumps(BODY).encode()
     request = Request(
         URL, data=payload, headers={"Content-Type": "application/json"}, method="POST"
     )
 
+    out_file = RAW_DIR / f"pkh2_{date.today().isoformat()}.csv"
     with urlopen(request, timeout=60) as response:
-        data = response.read().decode("utf-8")
-
-    out_file = raw_dir / f"pkh2_{date.today().isoformat()}.csv"
-    if out_file.exists():
-        out_file.unlink()
-
-    out_file.write_text(data, encoding="utf-8")
+        out_file.write_bytes(response.read())
 
     print(f"Saved: {out_file}")
+    return out_file
 
 
 if __name__ == "__main__":
-    main()
+    download_pkh2_csv()
