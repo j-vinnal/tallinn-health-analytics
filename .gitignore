@@ -175,6 +175,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 
 .idea/
+.vscode/
 
 # Abstra
 # Abstra is an AI-powered process automation framework.
@@ -206,3 +207,5 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+docs/

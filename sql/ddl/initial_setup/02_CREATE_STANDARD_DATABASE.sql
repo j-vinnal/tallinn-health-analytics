@@ -30,7 +30,7 @@ SET var_account_environment_id=$var_account_id||'_'||$var_environment_id; --STRA
 USE ROLE SYSADMIN;
 
 --DATABASE
-SET var_database_id=$var_account_environment_id||'_DB';
+SET var_database_id=$var_account_environment_id||'_DB'; --STRAT_DEV_DB
 SET var_database_id_comment=$var_account_id||' '||$var_environment_id||' database';
 CREATE DATABASE IF NOT EXISTS identifier($var_database_id) COMMENT = $var_database_id_comment;
 
