@@ -1,0 +1,7 @@
+[connection]
+account = "sf29869.north-europe.azure"
+user = "STRAT_DEV_USER_ETL"
+password = "Stratusertallinn35"
+role = "STRAT_DEV_ROLE_ETL"
+warehouse = "STRAT_DEV_WH_ETL"
+database = "STRAT_DEV_DB"

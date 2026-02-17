@@ -1,0 +1,15 @@
+[tai_api]
+api_root = "https://statistika.tai.ee/api/v1/en/Andmebaas"
+response_format = "json-stat2"
+timeout_seconds = 30
+output_path = "data/raw"
+
+[sources.SR57]
+path = "01Rahvastik/02Synnid/SR57.px"
+query = []
+
+[sources.PKH2]
+path = "02Haigestumus/05Psyyhikahaired/PKH2.px"
+query = []
+
+

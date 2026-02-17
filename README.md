@@ -1,13 +1,30 @@
 # tallinn-health-analytics
+Simple CLI data pipeline
 
-SQL-first, metadata-driven mini-andmeladu TAI PxWeb API andmetele.
+## Quick Start
 
-## Run
+1. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-Run from project root:
+2. Check configuration:
+- API sources: `conf/api_sources.toml`
+- Snowflake connection: `conf/snowflake.toml`
 
-`python -m src.data_extraction.pxweb_client`
+3. Run API -> raw:
+- Without `--sources`, all configured sources are downloaded.
+- With `--sources`, only the provided source IDs are downloaded.
 
-## Run
+```bash
+# All configured sources
+python pipeline.py run --step api_to_raw
 
-`python -m src.data_extraction.pxweb_client`
+# Only SR57
+python pipeline.py run --step api_to_raw --sources SR57
+
+# Only PKH2
+python pipeline.py run --step api_to_raw --sources PKH2
+```
+
+Result: files are saved in the `data/raw/` folder.

@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS ods.tai_tht001
     taidetud_ametikohad_leping FLOAT,
     tegelikult_taidetud        FLOAT,
     uletunnid_taiendav         FLOAT,
-    ods_insert_ts              TIMESTAMP_NTZ(9) DEFAULT CAST(CURRENT_TIMESTAMP() AS TIMESTAMP_NTZ(9)),
-
+    record_hash VARCHAR(32) NOT NULL,
+    extract_id INTEGER NOT NULL,
+    loaded_ts TIMESTAMP_NTZ(9) DEFAULT CAST(CURRENT_TIMESTAMP() AS TIMESTAMP_NTZ(9)),
     CONSTRAINT uk_ods_tht001 UNIQUE (aasta, naitaja, amet)
 );

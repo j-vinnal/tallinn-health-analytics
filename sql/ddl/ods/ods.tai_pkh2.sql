@@ -23,7 +23,8 @@ CREATE TABLE IF NOT EXISTS ods.tai_pkh2
     age_75_plus        INTEGER,
     age_75_84          INTEGER,
     age_85_plus        INTEGER,
-    ods_insert_ts      TIMESTAMP_NTZ(9) DEFAULT CAST(CURRENT_TIMESTAMP() AS TIMESTAMP_NTZ(9)),
-
+    record_hash VARCHAR(32) NOT NULL,
+    extract_id INTEGER NOT NULL,
+    loaded_ts TIMESTAMP_NTZ(9) DEFAULT CAST(CURRENT_TIMESTAMP() AS TIMESTAMP_NTZ(9)),
     CONSTRAINT uk_ods_pkh2 UNIQUE (aasta, diagnoos_rhk10, sugu)
 );

@@ -1,46 +1,57 @@
-"""
-pipeline.py
-"""
-from src.data_extraction.pxweb_client import download
-from src.data_loading.snowflake_loader import run_sql_file
-import config
+from __future__ import annotations
+
+import argparse
+import logging
+from typing import Callable
+
+from src.extract_from_api import fetch_data_to_file
+from src.utils import build_parser, configure_logging, load_api_config, validate_sources
+
+STEP_API_TO_RAW = "api_to_raw"
+SUPPORTED_STEPS = [STEP_API_TO_RAW]
+
+StepFn = Callable[[argparse.Namespace, logging.Logger], None]
 
 
-def extract_and_stage(source_name: str) -> None:
-    """Extract data from TAI API and load into Snowflake staging."""
-    source = config.TAI_SOURCES[source_name]
+def step_api_to_raw(args: argparse.Namespace, logger: logging.Logger) -> None:
+    config = load_api_config()
+    sources = config["sources"]
+    selected_sources = validate_sources(args.sources, sources)
 
-    raw_file = download(
-        source_name=source_name,
-        url=source["url"],
-        query=source["query"],
-        response_format=source["response_format"],
-    )
+    logger.info("Source(s): %d (%s)", len(selected_sources), ", ".join(selected_sources))
 
-    run_sql_file(
-        config.PROJECT_DIR / source["dml_file"],
-        local_file_uri=raw_file.resolve().as_uri(),
-        gz_name=f"{raw_file.name}.gz",
-    )
-
-    print(f"Loaded {source_name} → staging")
+    for source_id in selected_sources:
+        logger.info("Saved: %s", fetch_data_to_file(source_id, config, sources[source_id]))
 
 
-def load_ods() -> None:
-    """Transform staging → ODS layer."""
-    for ods_name, dml_path in config.ODS_LOADS.items():
-        run_sql_file(config.PROJECT_DIR / dml_path)
-        print(f"Loaded {ods_name}")
+def run_steps(args: argparse.Namespace, logger: logging.Logger) -> None:
+    step_registry: dict[str, StepFn] = {
+        STEP_API_TO_RAW: step_api_to_raw,
+    }
+
+    for step_name in args.step:
+        step_fn = step_registry.get(step_name)
+        if step_fn is None:
+            raise ValueError(f"Unsupported step: {step_name}")
+        logger.info("Step %s started.", step_name)
+        step_fn(args, logger)
+        logger.info("Step %s completed.", step_name)
 
 
 def main() -> None:
-    """Main function."""
-    # Step 1: Extract → Staging
-    for source_name in config.TAI_SOURCES:
-        extract_and_stage(source_name)
+    configure_logging()
+    parser = build_parser(SUPPORTED_STEPS)
+    args = parser.parse_args()
+    logger = logging.getLogger("pipeline")
 
-    # Step 2: Staging → ODS
-    load_ods()
+    try:
+        if args.command == "run":
+            run_steps(args, logger)
+            return
+        parser.error(f"Unsupported command: {args.command}")
+    except Exception as exc:
+        logger.error("Pipeline failed: %s", exc)
+        raise SystemExit(1) from exc
 
 
 if __name__ == "__main__":
