@@ -3,16 +3,20 @@ Simple CLI data pipeline
 
 ## Quick Start
 
-1. Install dependencies:
+1. Python version:
+- Use Python `3.11` or `3.12`.
+- Python `3.14` is not supported for this project (`snowflake-connector-python` install may fail).
+
+2. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Check configuration:
+3. Check configuration:
 - API sources: `conf/api_sources.toml`
 - Snowflake connection: `conf/snowflake.toml`
 
-3. Run API -> raw:
+4. Run API -> raw:
 - Without `--sources`, all configured sources are downloaded.
 - With `--sources`, only the provided source IDs are downloaded.
 
