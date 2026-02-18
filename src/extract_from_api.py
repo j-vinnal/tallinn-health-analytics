@@ -19,6 +19,6 @@ def fetch_data_to_file(source_id: str, config: dict, source_config: dict) -> Pat
     response.raise_for_status()
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    file_path = output_path / f"{source_id}_{timestamp}.json"
+    file_path = output_path / f"{source_id}_{timestamp}.csv"
     file_path.write_bytes(response.content)
     return file_path

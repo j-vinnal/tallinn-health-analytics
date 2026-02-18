@@ -7,28 +7,46 @@ PUT {local_file_uri} @STAGING.MY_STAGE AUTO_COMPRESS=TRUE OVERWRITE=TRUE;
 -- 2) Reload table
 TRUNCATE TABLE STAGING.TAI_PKH2_ST1;
 
--- 3) Copy into (explicit column list so staging_insert_ts uses DEFAULT)
+-- 3) Copy into
 COPY INTO STAGING.TAI_PKH2_ST1 (
-  aasta,
-  diagnoos_rhk10,
-  sugu,
-  vanuseruhmad_kokku,
-  age_0,
-  age_1_4,
-  age_5_9,
-  age_10_14,
-  age_15_19,
-  age_20_24,
-  age_25_34,
-  age_35_44,
-  age_45_54,
-  age_55_64,
-  age_65_74,
-  age_75_plus,
-  age_75_84,
-  age_85_plus
+  source_file,
+  diagnosis_icd10,
+  sex,
+  age_group,
+  year,
+  incidence_of_psychiatric_disorders,
+  natural_key_hash,
+  record_hash,
+  extract_id
 )
-FROM @STAGING.MY_STAGE/{gz_name}
+FROM (
+  SELECT
+    METADATA$FILENAME::VARCHAR AS source_file,
+    $1::VARCHAR AS diagnosis_icd10,
+    $2::VARCHAR AS sex,
+    $3::VARCHAR AS age_group,
+    TRY_TO_NUMBER($4)::NUMBER(4,0) AS year,
+    TRY_TO_NUMBER($5)::NUMBER(10,0) AS incidence_of_psychiatric_disorders,
+    MD5(
+      CONCAT(
+        COALESCE($1::VARCHAR, ''), '|',
+        COALESCE($2::VARCHAR, ''), '|',
+        COALESCE($3::VARCHAR, ''), '|',
+        COALESCE($4::VARCHAR, '')
+      )
+    ) AS natural_key_hash,
+    MD5(
+      CONCAT(
+        COALESCE($1::VARCHAR, ''), '|',
+        COALESCE($2::VARCHAR, ''), '|',
+        COALESCE($3::VARCHAR, ''), '|',
+        COALESCE($4::VARCHAR, ''), '|',
+        COALESCE($5::VARCHAR, '')
+      )
+    ) AS record_hash,
+    TRY_TO_NUMBER(REPLACE(REGEXP_SUBSTR(METADATA$FILENAME, '\\d{{8}}_\\d{{6}}'), '_', ''))::NUMBER(14,0) AS extract_id
+  FROM @STAGING.MY_STAGE/{gz_name}
+)
 FILE_FORMAT = (FORMAT_NAME = 'STAGING.file_format_csv_comma_doublequote_enclosure')
 ON_ERROR = 'ABORT_STATEMENT';
 

@@ -1,6 +1,6 @@
 [tai_api]
 api_root = "https://statistika.tai.ee/api/v1/en/Andmebaas"
-response_format = "json-stat2"
+response_format = "csv2"
 timeout_seconds = 30
 output_path = "data/raw"
 
