@@ -72,7 +72,7 @@ def run_raw_to_staging(
             sql_path,
             {
                 "local_file_uri": f"'{file_path.resolve().as_uri()}'",
-                "source_file": file_path.name,
+                "gz_name": f"{file_path.name}.gz",
                 "extract_id": str(extract_id),
             },
         )

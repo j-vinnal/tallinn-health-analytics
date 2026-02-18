@@ -16,6 +16,7 @@ def configure_logging() -> None:
         level=logging.INFO,
         format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
     )
+    logging.getLogger("snowflake.connector.connection").setLevel(logging.WARNING)
 
 
 def build_parser(supported_steps: list[str]) -> argparse.ArgumentParser:
