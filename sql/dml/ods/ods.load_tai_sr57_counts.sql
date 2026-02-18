@@ -1,8 +1,3 @@
-USE ROLE SYSADMIN;
-USE WAREHOUSE COMPUTE_WH;
-USE DATABASE STRAT_DEV_DB;
-USE SCHEMA ODS;
-
 SET v_run_ts = CAST(CURRENT_TIMESTAMP() AS TIMESTAMP_NTZ(9));
 SET v_src_count = (
     SELECT COUNT(*)
@@ -25,7 +20,7 @@ FROM (
             st.year,
             TRIM(st.educational_level) AS educational_level,
             TRIM(st.age) AS age,
-            TRY_TO_NUMBER(st.fathers_age)::NUMBER(10,0) AS father_count,
+            st.fathers_age::NUMBER(10,0) AS father_count,
             st.record_hash AS record_hash
         FROM STAGING.TAI_SR57_ST1 st
         WHERE st.year IS NOT NULL
@@ -74,7 +69,7 @@ WITH src AS (
         st.year,
         TRIM(st.educational_level) AS educational_level,
         TRIM(st.age) AS age,
-        TRY_TO_NUMBER(st.fathers_age)::NUMBER(10,0) AS father_count,
+        st.fathers_age::NUMBER(10,0) AS father_count,
         st.record_hash AS record_hash
     FROM STAGING.TAI_SR57_ST1 st
     WHERE st.year IS NOT NULL

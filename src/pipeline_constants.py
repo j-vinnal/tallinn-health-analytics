@@ -1,0 +1,11 @@
+from __future__ import annotations
+
+STEP_API_TO_RAW = "api_to_raw"
+STEP_RAW_TO_STAGING = "raw_to_staging"
+STEP_STAGING_TO_ODS = "staging_to_ods"
+
+SUPPORTED_STEPS = [STEP_API_TO_RAW, STEP_RAW_TO_STAGING, STEP_STAGING_TO_ODS]
+
+STATUS_SUCCESS = "SUCCESS"
+STATUS_SKIPPED = "SKIPPED"
+STATUS_FAILED = "FAILED"
