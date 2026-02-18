@@ -5,7 +5,7 @@ from pathlib import Path
 import shutil
 from typing import Any
 
-from src.utils import PROJECT_ROOT, load_snowflake_config
+from src.utils import PROJECT_ROOT, insert_technical_log, load_snowflake_config
 
 STEP_RAW_TO_STAGING = "raw_to_staging"
 DML_BY_SOURCE = {
@@ -31,56 +31,6 @@ def _move_to_processed(file_path: Path, source_id: str, processed_root: Path) ->
     return Path(moved_to)
 
 
-def _insert_technical_log(
-    conn: Any,
-    extract_id: int,
-    source_id: str,
-    source_file: str | None,
-    target_table: str | None,
-    status: str,
-    error_message: str | None,
-) -> None:
-    with conn.cursor() as cursor:
-        cursor.execute(
-            """
-            INSERT INTO TECHNICAL.LOG (
-                EXTRACT_ID,
-                STEP_NAME,
-                SOURCE_ID,
-                SOURCE_FILE,
-                TARGET_TABLE,
-                STATUS,
-                ERROR_MESSAGE
-            )
-            VALUES (%s, %s, %s, %s, %s, %s, %s)
-            """,
-            (
-                extract_id,
-                STEP_RAW_TO_STAGING,
-                source_id,
-                source_file,
-                target_table,
-                status,
-                error_message,
-            ),
-        )
-
-
-def get_next_extract_id() -> int:
-    import snowflake.connector
-
-    conn = snowflake.connector.connect(**load_snowflake_config())
-    try:
-        with conn.cursor() as cursor:
-            cursor.execute("SELECT TECHNICAL.EXTRACT_ID_SEQ.NEXTVAL")
-            row = cursor.fetchone()
-            if row is None:
-                raise ValueError("Failed to fetch extract_id from TECHNICAL.EXTRACT_ID_SEQ")
-            return int(row[0])
-    finally:
-        conn.close()
-
-
 def run_raw_to_staging(
     source_id: str, extract_id: int, api_config: dict[str, Any], logger: logging.Logger
 ) -> None:
@@ -97,11 +47,18 @@ def run_raw_to_staging(
         files = sorted((raw_root / source_id).glob("*.csv"))
         if not files:
             logger.warning("No CSV file found for source: %s", source_id)
-            _insert_technical_log(
-                conn, extract_id, source_id, source_file, target_table, "SKIPPED", None
+            insert_technical_log(
+                conn,
+                extract_id,
+                STEP_RAW_TO_STAGING,
+                source_id,
+                source_file,
+                target_table,
+                "SKIPPED",
+                None,
             )
             return
-        file_path = files[0]
+        file_path = files[0] # todo: handle multiple files if needed
         source_file = file_path.name
 
         sql_path = DML_BY_SOURCE.get(source_id)
@@ -120,14 +77,22 @@ def run_raw_to_staging(
             },
         )
         _move_to_processed(file_path, source_id, processed_root)
-        _insert_technical_log(
-            conn, extract_id, source_id, source_file, target_table, "SUCCESS", None
+        insert_technical_log(
+            conn,
+            extract_id,
+            STEP_RAW_TO_STAGING,
+            source_id,
+            source_file,
+            target_table,
+            "SUCCESS",
+            None,
         )
         logger.info("Loaded: %s -> %s", file_path.name, target_table)
     except Exception as exc:
-        _insert_technical_log(
+        insert_technical_log(
             conn,
             extract_id,
+            STEP_RAW_TO_STAGING,
             source_id,
             source_file,
             target_table,

@@ -5,8 +5,14 @@ import logging
 from typing import Callable
 
 from src.extract_from_api import fetch_data_to_file
-from src.raw_to_staging import get_next_extract_id, run_raw_to_staging
-from src.utils import build_parser, configure_logging, load_api_config, validate_sources
+from src.raw_to_staging import run_raw_to_staging
+from src.utils import (
+    build_parser,
+    configure_logging,
+    get_next_extract_id,
+    load_api_config,
+    validate_sources,
+)
 
 STEP_API_TO_RAW = "api_to_raw"
 STEP_RAW_TO_STAGING = "raw_to_staging"

@@ -52,6 +52,57 @@ def load_snowflake_config(config_path: Path | None = None) -> dict:
     return config["connection"]
 
 
+def get_next_extract_id() -> int:
+    import snowflake.connector
+
+    conn = snowflake.connector.connect(**load_snowflake_config())
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT TECHNICAL.EXTRACT_ID_SEQ.NEXTVAL")
+            row = cursor.fetchone()
+            if row is None:
+                raise ValueError("Failed to fetch extract_id from TECHNICAL.EXTRACT_ID_SEQ")
+            return int(row[0])
+    finally:
+        conn.close()
+
+
+def insert_technical_log(
+    conn: Any,
+    extract_id: int,
+    step_name: str,
+    source_id: str,
+    source_file: str | None,
+    target_table: str | None,
+    status: str,
+    error_message: str | None,
+) -> None:
+    with conn.cursor() as cursor:
+        cursor.execute(
+            """
+            INSERT INTO TECHNICAL.LOG (
+                EXTRACT_ID,
+                STEP_NAME,
+                SOURCE_ID,
+                SOURCE_FILE,
+                TARGET_TABLE,
+                STATUS,
+                ERROR_MESSAGE
+            )
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """,
+            (
+                extract_id,
+                step_name,
+                source_id,
+                source_file,
+                target_table,
+                status,
+                error_message,
+            ),
+        )
+
+
 def validate_sources(
     selected: list[str] | None, available: dict[str, Any]
 ) -> list[str]:
