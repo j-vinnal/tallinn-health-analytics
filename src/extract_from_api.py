@@ -5,8 +5,12 @@ import requests
 
 def fetch_data_to_file(source_id: str, config: dict, source_config: dict) -> Path:
     api_config = config["tai_api"]
-    output_path = Path(api_config.get("output_path", "data/raw"))
+    output_path = Path(api_config.get("output_path", "data/raw"), source_id)
     output_path.mkdir(parents=True, exist_ok=True)
+    
+    for existing_file in output_path.glob("*"):
+        if existing_file.is_file():
+            existing_file.unlink()
 
     url = f"{api_config['api_root']}/{source_config['path']}"
     payload = {
