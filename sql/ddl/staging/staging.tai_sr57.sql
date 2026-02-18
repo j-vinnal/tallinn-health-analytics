@@ -11,7 +11,7 @@ CREATE TRANSIENT TABLE IF NOT EXISTS staging.tai_sr57_st1 (
     fathers_age       NUMBER(10,1),
     natural_key_hash  VARCHAR(32) NOT NULL,
     record_hash       VARCHAR(32) NOT NULL,
-    extract_id        NUMBER(14,0) NOT NULL,
+    extract_id        NUMBER(38,0) NOT NULL,
     loaded_ts         TIMESTAMP_NTZ(9) DEFAULT CAST(CURRENT_TIMESTAMP() AS TIMESTAMP_NTZ(9)),
     UNIQUE (extract_id, natural_key_hash)
 );

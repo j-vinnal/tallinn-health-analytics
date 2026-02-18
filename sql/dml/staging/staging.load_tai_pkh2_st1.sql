@@ -44,7 +44,7 @@ FROM (
         COALESCE($5::VARCHAR, '')
       )
     ) AS record_hash,
-    TRY_TO_NUMBER(REPLACE(REGEXP_SUBSTR(METADATA$FILENAME, '\\d{{8}}_\\d{{6}}'), '_', ''))::NUMBER(14,0) AS extract_id
+    '{extract_id}'::NUMBER(38,0) AS extract_id
   FROM @STAGING.MY_STAGE/{source_file}.gz
 )
 FILE_FORMAT = (FORMAT_NAME = 'STAGING.file_format_csv_comma_doublequote_enclosure')

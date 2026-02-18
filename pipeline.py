@@ -5,7 +5,7 @@ import logging
 from typing import Callable
 
 from src.extract_from_api import fetch_data_to_file
-from src.raw_to_staging import run_raw_to_staging
+from src.raw_to_staging import get_next_extract_id, run_raw_to_staging
 from src.utils import build_parser, configure_logging, load_api_config, validate_sources
 
 STEP_API_TO_RAW = "api_to_raw"
@@ -30,11 +30,12 @@ def step_raw_to_staging(args: argparse.Namespace, logger: logging.Logger) -> Non
     config = load_api_config()
     sources = config["sources"]
     selected_sources = validate_sources(args.sources, sources)
+    extract_id = get_next_extract_id()
 
     logger.info("Source(s): %d (%s)", len(selected_sources), ", ".join(selected_sources))
     
     for source_id in selected_sources:
-        run_raw_to_staging(source_id, config, logger)
+        run_raw_to_staging(source_id, extract_id, config, logger)
 
 
 def run_steps(args: argparse.Namespace, logger: logging.Logger) -> None:
