@@ -3,6 +3,7 @@ api_root = "https://statistika.tai.ee/api/v1/en/Andmebaas"
 response_format = "csv2"
 timeout_seconds = 30
 output_path = "data/raw"
+processed_path = "data/processed"
 
 [sources.SR57]
 path = "01Rahvastik/02Synnid/SR57.px"

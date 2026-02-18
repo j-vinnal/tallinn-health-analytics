@@ -21,7 +21,7 @@ COPY INTO STAGING.TAI_PKH2_ST1 (
 )
 FROM (
   SELECT
-    METADATA$FILENAME::VARCHAR AS source_file,
+    '{source_file}'::VARCHAR AS source_file,
     $1::VARCHAR AS diagnosis_icd10,
     $2::VARCHAR AS sex,
     $3::VARCHAR AS age_group,
@@ -45,10 +45,10 @@ FROM (
       )
     ) AS record_hash,
     TRY_TO_NUMBER(REPLACE(REGEXP_SUBSTR(METADATA$FILENAME, '\\d{{8}}_\\d{{6}}'), '_', ''))::NUMBER(14,0) AS extract_id
-  FROM @STAGING.MY_STAGE/{gz_name}
+  FROM @STAGING.MY_STAGE/{source_file}.gz
 )
 FILE_FORMAT = (FORMAT_NAME = 'STAGING.file_format_csv_comma_doublequote_enclosure')
 ON_ERROR = 'ABORT_STATEMENT';
 
 -- 4) Optional cleanup
-REMOVE @STAGING.MY_STAGE/{gz_name};
+REMOVE @STAGING.MY_STAGE/{source_file}.gz;

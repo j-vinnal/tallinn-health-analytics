@@ -8,6 +8,7 @@ import tomllib
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_API_CONFIG_PATH = PROJECT_ROOT / "conf" / "api_sources.toml"
+DEFAULT_SNOWFLAKE_CONFIG_PATH = PROJECT_ROOT / "conf" / "snowflake.toml"
 
 
 def configure_logging() -> None:
@@ -25,15 +26,14 @@ def build_parser(supported_steps: list[str]) -> argparse.ArgumentParser:
     run_parser.add_argument(
         "--step",
         action="append",
-        required=True,
         choices=supported_steps,
-        help="Step to run. Repeat to run multiple steps in order.",
+        help="Step to run. Repeat to run multiple steps in order. If omitted, runs all steps.",
     )
     run_parser.add_argument(
         "--sources",
         nargs="*",
         default=None,
-        help="Optional source IDs for api_to_raw (e.g., SR57 PKH2).",
+        help="Optional source IDs for api_to_raw/raw_to_staging (e.g., SR57 PKH2).",
     )
 
     return parser
@@ -43,6 +43,13 @@ def load_api_config(config_path: Path | None = None) -> dict:
     path = config_path or DEFAULT_API_CONFIG_PATH
     with path.open("rb") as handle:
         return tomllib.load(handle)
+
+
+def load_snowflake_config(config_path: Path | None = None) -> dict:
+    path = config_path or DEFAULT_SNOWFLAKE_CONFIG_PATH
+    with path.open("rb") as handle:
+        config = tomllib.load(handle)
+    return config["connection"]
 
 
 def validate_sources(
