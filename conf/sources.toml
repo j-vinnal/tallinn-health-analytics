@@ -1,0 +1,20 @@
+[SR57]
+api_path = "01Rahvastik/02Synnid/SR57.px"
+query = []
+staging_table = "STAGING.TAI_SR57_ST1"
+staging_dml = "sql/dml/staging/staging.load_tai_sr57_st1.sql"
+ods_tables = ["ODS.SR57_FATHER_AVG_AGE", "ODS.SR57_FATHER_COUNTS"]
+ods_dmls = [
+    "sql/dml/ods/ods.load_tai_sr57_avg_age.sql",
+    "sql/dml/ods/ods.load_tai_sr57_counts.sql",
+]
+
+[PKH2]
+api_path = "02Haigestumus/05Psyyhikahaired/PKH2.px"
+query = []
+staging_table = "STAGING.TAI_PKH2_ST1"
+staging_dml = "sql/dml/staging/staging.load_tai_pkh2_st1.sql"
+ods_tables = ["ODS.PKH2_INCIDENCE"]
+ods_dmls = [
+    "sql/dml/ods/ods.load_tai_pkh2_incidence.sql",
+]

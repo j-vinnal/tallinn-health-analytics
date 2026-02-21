@@ -17,7 +17,7 @@ pip install -r requirements.txt
 - Snowflake connection: `conf/snowflake.toml`
 
 4. Run API -> raw:
-- Without `--sources`, all configured sources are downloaded.
+- Without `--sources` , all configured sources are downloaded.
 - With `--sources`, only the provided source IDs are downloaded.
 
 ```bash
