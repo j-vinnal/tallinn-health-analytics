@@ -18,3 +18,7 @@ ods_tables = ["ODS.PKH2_INCIDENCE"]
 ods_dmls = [
     "sql/dml/ods/ods.load_tai_pkh2_incidence.sql",
 ]
+
+[ETU41]
+api_path = "05Uuringud/01ETeU/04VaimneTervis/ETU41.px"
+query = []
