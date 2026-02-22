@@ -1,3 +1,4 @@
+# SR57: Vastsündinute isade vanus haridustaseme järgi
 [SR57]
 api_path = "01Rahvastik/02Synnid/SR57.px"
 query = []
@@ -9,6 +10,13 @@ ods_dmls = [
     "sql/dml/ods/ods.load_tai_sr57_counts.sql",
 ]
 
+# SR52: Sünnitajad hariduse, tegevusala ja vanuserühma järgi
+[SR52]
+api_path = "01Rahvastik/02Synnid/SR52.px"
+query = []
+
+
+# PKH2: Uued ambulatoorsed psühhiaatrilised haigusjuhud soo ja vanuserühma järgi
 [PKH2]
 api_path = "02Haigestumus/05Psyyhikahaired/PKH2.px"
 query = []
@@ -19,6 +27,25 @@ ods_dmls = [
     "sql/dml/ods/ods.load_tai_pkh2_incidence.sql",
 ]
 
+# ETU41: Depressiooni sümptomite esinemine soo, vanuserühma ja taustatunnuste (rahvus, haridustase, kooselu, majanduslik aktiivsus) järgi
 [ETU41]
 api_path = "05Uuringud/01ETeU/04VaimneTervis/ETU41.px"
+query = [
+    { code = "Sugu", selection = { filter = "item", values = ["0", "1", "2"] } },
+    { code = "Vanuserühm", selection = { filter = "item", values = ["0", "1", "2", "3", "4", "5", "6", "7"] } },
+]
+
+# TKU01: Hinnang oma käesoleva aja tervisele soo ja vanuserühma järgi
+[TKU01]
+api_path = "05Uuringud/02TKU/01Tervis/TKU01.px"
+query = []
+
+# TKU02: Hinnang oma käesoleva aja tervisele soo ja hariduse järgi
+[TKU02]
+api_path = "05Uuringud/02TKU/01Tervis/TKU02.px"
+query = []
+
+# TKU05: Hinnang oma käesoleva aja tervisele soo ja majandusliku aktiivsuse järgi
+[TKU05]
+api_path = "05Uuringud/02TKU/01Tervis/TKU05.px"
 query = []
