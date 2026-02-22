@@ -36,6 +36,6 @@ def _fetch(source_id: str, api_path: str, query: list[dict], api_cfg: dict, outp
     resp.raise_for_status()
 
     ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-    file_path = output_dir / f"{source_id}_{ts}_csv2_format.csv"
+    file_path = output_dir / f"{source_id}_{ts}_csv2_format_tuhi_query.csv"
     file_path.write_bytes(resp.content)
     return file_path

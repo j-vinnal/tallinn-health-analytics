@@ -1,0 +1,78 @@
+{
+  "title": "TKU05: Self-estimated health by sex and economic activity",
+  "variables": [
+    {
+      "code": "Andmete liik",
+      "text": "Type of data",
+      "values": ["0", "1"],
+      "valueTexts": ["Weighted", "Unweighted"]
+    },
+    {
+      "code": "Aasta",
+      "text": "Year",
+      "values": [
+        "1990",
+        "1992",
+        "1994",
+        "1996",
+        "1998",
+        "2000",
+        "2002",
+        "2004",
+        "2006",
+        "2008",
+        "2010",
+        "2012",
+        "2014",
+        "2016",
+        "2018",
+        "2020",
+        "2022",
+        "2024"
+      ],
+      "valueTexts": [
+        "1990",
+        "1992",
+        "1994",
+        "1996",
+        "1998",
+        "2000",
+        "2002",
+        "2004",
+        "2006",
+        "2008",
+        "2010",
+        "2012",
+        "2014",
+        "2016",
+        "2018",
+        "2020",
+        "2022",
+        "2024"
+      ],
+      "time": true
+    },
+    {
+      "code": "Tervise enesehinnang",
+      "text": "Self-estimated health",
+      "values": ["0", "1", "2"],
+      "valueTexts": [
+        "Good or reasonably good",
+        "Average",
+        "Poor or rather poor"
+      ]
+    },
+    {
+      "code": "Sugu",
+      "text": "Sex",
+      "values": ["0", "1", "2"],
+      "valueTexts": ["Men and women", "Men", "Women"]
+    },
+    {
+      "code": "Majanduslik aktiivsus",
+      "text": "Economic activity",
+      "values": ["0", "1", "2"],
+      "valueTexts": ["Employed", "Non-active", "Unemployed"]
+    }
+  ]
+}

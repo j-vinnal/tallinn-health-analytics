@@ -1,0 +1,58 @@
+{
+  "title": "ETU41: Prevalence of depression symptoms by sex, age group and background variables (nationality, education, cohabiting, economic activity)",
+  "variables": [
+    {
+      "code": "Aasta",
+      "text": "Year",
+      "values": ["2006", "2014", "2019"],
+      "valueTexts": ["2006", "2014", "2019"],
+      "time": true
+    },
+    {
+      "code": "Taustatunnus",
+      "text": "Background variable",
+      "values": ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
+      "valueTexts": [
+        "Total",
+        "Estonian",
+        "Non-Estonian",
+        "University education",
+        "Upper secondary education",
+        "Lower secondary education or less",
+        "Cohabiting",
+        "Not cohabiting",
+        "Active",
+        "Non-active"
+      ]
+    },
+    {
+      "code": "Depressioon",
+      "text": "Depression",
+      "values": ["0", "1"],
+      "valueTexts": ["Without depression", "With depression"]
+    },
+    {
+      "code": "Sugu",
+      "text": "Sex",
+      "values": ["0", "1", "2"],
+      "valueTexts": ["Men and women", "Men", "Women"],
+      "elimination": true
+    },
+    {
+      "code": "Vanuserühm",
+      "text": "Age group",
+      "values": ["0", "1", "2", "3", "4", "5", "6", "7"],
+      "valueTexts": [
+        "15 and older",
+        "15-24",
+        "25-34",
+        "35-44",
+        "45-54",
+        "55-64",
+        "65-74",
+        "75 and older"
+      ],
+      "elimination": true
+    }
+  ]
+}
